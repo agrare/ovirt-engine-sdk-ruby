@@ -80,6 +80,27 @@ jobs:
           name: rpm-${{ matrix.shortcut }}
           path: exported-artifacts
 
+  build-ubuntu:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    name: Build on ubuntu-latest
+
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v7
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y \
+            gcc git libcurl4-openssl-dev libxml2-dev \
+            maven openjdk-25-jdk ruby ruby-dev \
+            rubygems ruby-bundler
+
+      - name: Build
+        run: mvn package
+
   publish-rpms:
     permissions:
       artifact-metadata: read
